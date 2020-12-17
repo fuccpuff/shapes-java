@@ -15,14 +15,16 @@ import androidx.annotation.Nullable;
 public class MyView extends View {
 
     private final static int MAX_POINTS = 5;
-    private static final String TYPE_RECT = "rect";
-    private static final String TYPE_CIRCLE = "circle";
+    public static final String TYPE_RECT = "rect";
+    public static final String TYPE_CIRCLE = "circle";
+    public static final String TYPE_TRIANGLE = "triangle";
+
     int width;
     int height;
     int sizeGrid = 48;
     float density;
 
-    String typeShape = TYPE_CIRCLE;
+    String typeShape = TYPE_RECT;
     String color = "000000";
 
     int counterPoints;
@@ -43,6 +45,15 @@ public class MyView extends View {
         sizeGrid *= density;
     }
 
+    public void undo() {
+        if (counterShapes > 0) {
+            counterShapes--;
+            this.invalidate();
+        }
+
+    }
+
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -53,8 +64,9 @@ public class MyView extends View {
         paint.setColor(Color.RED);
         drawGrid(canvas);
         drawPoints(canvas);
-        drawRects(canvas);
-        drawCircle(canvas);
+ //       drawRects(canvas);
+ //       drawCircle(canvas);
+        drawShapes(canvas);
     }
 
     private void drawGrid(Canvas canvas) {
@@ -110,6 +122,16 @@ public class MyView extends View {
         }
     }
 
+    public void setColor(String typeColor){
+        this.color = typeColor;
+        this.invalidate();
+    }
+
+    public void setTypeShape(String typeShape){
+        this.typeShape = typeShape;
+        this.invalidate();
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         Log.i("touch", event.getAction() + "");
@@ -121,8 +143,9 @@ public class MyView extends View {
                 counterPoints++;
 
                 switch (this.typeShape) {
-                 //   case TYPE_RECT: checkPointsForCreateRect(); break;
+                    case TYPE_RECT: checkPointsForCreateRect(); break;
                     case TYPE_CIRCLE: checkPointsForCreateCircle(); break;
+                    case TYPE_TRIANGLE: checkPointsForCreateTriangle(); break;
                 }
 
                 this.invalidate();
@@ -136,8 +159,8 @@ public class MyView extends View {
             // создаем прямоугольник
             Rect rect = new Rect(this.color, points[0], points[1]);
 
-            rects[counterRect] = rect;
-            counterRect++;
+            shapes[counterShapes] = rect;
+            counterShapes++;
 
             counterPoints = 0;
             this.invalidate();
@@ -150,8 +173,19 @@ public class MyView extends View {
             float b = points[1].y - points[0].y;
             float radius = (float)Math.sqrt( Math.pow(a, 2) + Math.pow(b, 2) );
             Circle circle = new Circle(this.color, points[0], radius);
-            circles[counterCircles] = circle;
-            counterCircles++;
+            shapes[counterShapes] = circle;
+            counterShapes++;
+            counterPoints = 0;
+            this.invalidate();
+        }
+    }
+
+    private void checkPointsForCreateTriangle() {
+        if(counterPoints >= 3) {
+            // Создаём треугольник
+            Triangle triangle = new Triangle(this.color,points[0], points[1],points[2]);
+            shapes[counterShapes] = triangle;
+            counterShapes++;
             counterPoints = 0;
             this.invalidate();
         }
