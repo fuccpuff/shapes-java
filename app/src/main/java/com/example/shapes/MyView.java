@@ -64,8 +64,8 @@ public class MyView extends View {
         paint.setColor(Color.RED);
         drawGrid(canvas);
         drawPoints(canvas);
- //       drawRects(canvas);
- //       drawCircle(canvas);
+        drawRects(canvas);
+        drawCircle(canvas);
         drawShapes(canvas);
     }
 

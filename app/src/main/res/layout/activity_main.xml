@@ -63,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="47dp"
         android:layout_marginStart="64dp"
-        android:entries="@array/colors"
+        android:entries="@array/colorNames"
         app:layout_constraintBottom_toBottomOf="@+id/shapes"
         app:layout_constraintStart_toEndOf="@+id/shapes"
         app:layout_constraintTop_toTopOf="parent" />
